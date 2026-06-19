@@ -178,7 +178,8 @@
                 <div class="group"><label for="incidentNatureInput">Nature of Injury</label><input type="text" id="incidentNatureInput" placeholder="Enter nature of injury"></div>
                 <div class="group"><label for="incidentCauseInput">Cause of Illness or Accident</label><input type="text" id="incidentCauseInput" placeholder="Enter cause"></div>
                 <div class="group"><label for="incidentDaysAbsentInput">Number of Days Absent</label><input type="number" id="incidentDaysAbsentInput" step="0.5" min="0" placeholder="Enter days absent"></div>
-                <div class="group" style="grid-column:1/-1"><label for="incidentSummaryInput">Report Summary</label><textarea id="incidentSummaryInput" placeholder="Write the incident summary here..."></textarea></div>
+                <div class="group"><label for="incidentSummaryInput">Report Summary</label><textarea id="incidentSummaryInput" placeholder="Write the incident summary here..."></textarea></div>
+                <div class="group"><label for="incidentPasswordInput">Admin Password</label><input type="password" id="incidentPasswordInput" placeholder="Required to save incident"></div>
             </div>
             <div class="actions">
                 <button class="btn btn-danger" onclick="closeIncidentModal()">Cancel</button>
@@ -219,7 +220,7 @@
         if (typeof metrics.lastTickTimestamp !== "number") metrics.lastTickTimestamp = Date.now();
 
         function cache() {
-            ["liveClock","periodSelect","displayPeriodHours","displayHoursLost","displayDaysLost","displayTotalCount","displayMaleCount","displayFemaleCount","displayIncidentFreeDays","displayRatio","displayCompliance","adminPanelModal","inputMale","inputFemale","inputDaysLost","adminPassword","incidentLogBody","incidentModal","incidentDateTimeInput","incidentPersonInput","incidentTypeInput","incidentNatureInput","incidentCauseInput","incidentDaysAbsentInput","incidentSummaryInput","modalTitle","passwordModal","passwordInput","monthList"].forEach(id => els[id] = document.getElementById(id));
+            ["liveClock","periodSelect","displayPeriodHours","displayHoursLost","displayDaysLost","displayTotalCount","displayMaleCount","displayFemaleCount","displayIncidentFreeDays","displayRatio","displayCompliance","adminPanelModal","inputMale","inputFemale","inputDaysLost","adminPassword","incidentLogBody","incidentModal","incidentDateTimeInput","incidentPersonInput","incidentTypeInput","incidentNatureInput","incidentCauseInput","incidentDaysAbsentInput","incidentSummaryInput","incidentPasswordInput","modalTitle","passwordModal","passwordInput","monthList"].forEach(id => els[id] = document.getElementById(id));
         }
 
         function save() {
@@ -283,6 +284,7 @@
                 els.incidentCauseInput.value = "";
                 els.incidentDaysAbsentInput.value = "";
                 els.incidentSummaryInput.value = "";
+                els.incidentPasswordInput.value = "";
             } else {
                 const log = metrics.incidentLogs[index];
                 els.incidentDateTimeInput.value = localDateTimeValue(log.timestamp);
@@ -292,6 +294,7 @@
                 els.incidentCauseInput.value = log.causeOfIncident || "";
                 els.incidentDaysAbsentInput.value = log.daysAbsent || "";
                 els.incidentSummaryInput.value = log.reportSummary || "";
+                els.incidentPasswordInput.value = "";
             }
             els.incidentModal.classList.add("visible");
         }
@@ -302,6 +305,7 @@
         }
 
         function saveIncidentFromModal() {
+            if (els.incidentPasswordInput.value !== ADMIN_PASSWORD) return alert("Incorrect Admin Password!");
             const timestamp = els.incidentDateTimeInput.value;
             const injuredPerson = els.incidentPersonInput.value.trim();
             const incidentType = els.incidentTypeInput.value.trim();
